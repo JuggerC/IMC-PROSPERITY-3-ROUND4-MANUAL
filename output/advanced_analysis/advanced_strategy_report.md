@@ -25,11 +25,11 @@
 
 ## 社会动态分析
 
-考虑社会影响和规范演化后的最优选择: 宝箱1 (乘数=80, 居民=6)
+考虑社会影响和规范演化后的最优选择: 宝箱9 (乘数=73, 居民=4)
 
 ## 元策略分析
 
-基于对手建模和最优回应的最佳选择: 宝箱9 (乘数=73, 居民=4)
+基于对手建模和最优回应的最佳选择: 宝箱1 (乘数=80, 居民=6)
 
 ## 综合分析结果
 
@@ -45,8 +45,8 @@
 
 ### 模型一致性
 
-宝箱9 (乘数=73, 居民=4)被以下模型选为最佳: cognitive, behavioral, meta
-宝箱1 (乘数=80, 居民=6)被以下模型选为最佳: social
+宝箱9 (乘数=73, 居民=4)被以下模型选为最佳: cognitive, behavioral, social
+宝箱1 (乘数=80, 居民=6)被以下模型选为最佳: meta
 
 ## 总结建议
 
@@ -55,23 +55,23 @@
 理由: 多个模型一致推荐该宝箱，表明其在不同决策逻辑和情景下都表现良好。
 
 
-## 可视化图表
+## Visualization Charts
 
-### 认知层次模型策略分布
+### Cognitive Hierarchy Model Distribution
 ![Cognitive Hierarchy Model Distribution](cognitive_distribution.png)
 
-### 行为经济学模型权重
+### Behavioral Economics Model Weights
 ![Behavioral Economics Model Weights](behavioral_weights.png)
 
-### 社会动态模型最终分布
+### Social Dynamics Model Final Distribution
 ![Social Dynamics Model Final Distribution](social_distribution.png)
 
-### 收益矩阵热图
+### Payoff Matrix Heatmap
 ![Payoff Matrix Heatmap](payoff_matrix.png)
 
-### 社会动态演化过程
+### Social Dynamics Evolution Process
 ![Social Dynamics Evolution Process](social_dynamics_evolution.png)
 
-### 各模型最佳策略比较
+### Best Strategy Comparison Across Models
 ![Best Strategy Comparison Across Models](model_comparison.png)
 

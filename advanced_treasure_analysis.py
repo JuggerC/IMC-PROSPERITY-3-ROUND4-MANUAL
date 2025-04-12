@@ -17,7 +17,7 @@ from typing import List, Dict, Any
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # 导入宝箱类和高级策略分析器
-from original_content.simulator import Treasure
+from game_iteration_model.simulator import Treasure
 from advanced_strategy.treasure_strategy_analyzer import TreasureStrategyAnalyzer
 
 def create_output_dir():
