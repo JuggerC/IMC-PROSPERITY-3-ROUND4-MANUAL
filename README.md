@@ -68,11 +68,8 @@ round2manual/
 │   ├── meta_strategy/         # 元策略模型
 │   ├── visualization/         # 可视化工具
 │   └── treasure_strategy_analyzer.py  # 宝箱策略分析器
-├── game_iteration_model/      # 博弈迭代分析模块
-│   ├── simulator.py           # 宝箱模拟器
-│   ├── scenario_analysis.py   # 情景分析
-│   ├── reverse_game_theory.py # 反向博弈分析
-│   └── main.py                # 主分析脚本
+├── models/                    # 基础模型
+│   └── simulator.py           # 宝箱模拟器类
 ├── advanced_treasure_analysis.py  # 高级策略分析主脚本
 ├── comprehensive_project_summary.md # 完整项目总结
 └── output/                    # 分析结果输出
@@ -119,18 +116,9 @@ round2manual/
 
 ## 如何使用
 
-### 博弈迭代分析
-
-运行博弈迭代分析：
-
-```bash
-cd round2manual
-python game_iteration_model/main.py
-```
-
 ### 高级策略分析
 
-单独运行高级策略分析：
+运行高级策略分析：
 
 ```bash
 cd round2manual
@@ -138,40 +126,27 @@ python advanced_treasure_analysis.py
 ```
 
 支持的命令行参数：
-- `--rational`: 理性玩家比例 (默认: 0.35)
-- `--heuristic`: 启发式玩家比例 (默认: 0.45)
-- `--second-box-pct`: 选择第二个宝箱的玩家比例 (默认: 0.05)
+- `--rational`: 理性玩家比例 (默认: 0.45)
+- `--heuristic`: 启发式玩家比例 (默认: 0.35)
+- `--second-box-pct`: 选择第二个宝箱的玩家比例 (默认: 0.15)
 - `--second-box-cost`: 选择第二个宝箱的成本 (默认: 50000)
+- `--third-box-pct`: 选择第三个宝箱的玩家比例 (默认: 0.05)
+- `--third-box-cost`: 选择第三个宝箱的成本 (默认: 100000)
+- `--num-players`: 玩家总数 (默认: 4130)
 - `--output-dir`: 输出目录 (默认: output/advanced_analysis)
 
 例如：
 
 ```bash
-python advanced_treasure_analysis.py --rational 0.4 --heuristic 0.4 --second-box-pct 0.1
-```
-
-### 整合分析
-
-运行整合了高级策略分析的完整分析：
-
-```bash
-cd round2manual
-python game_iteration_model/main.py --with-advanced
-```
-
-整合分析也支持高级策略分析的参数设置：
-
-```bash
-python game_iteration_model/main.py --with-advanced --rational 0.4 --heuristic 0.4
+python advanced_treasure_analysis.py --rational 0.5 --heuristic 0.3 --second-box-pct 0.1
 ```
 
 ## 分析报告
 
 运行分析后，可以查看以下文件获取结果：
 
-- `game_iteration_model/output/`: 博弈迭代分析结果和图表
 - `output/advanced_analysis/advanced_strategy_report.md`: 高级策略分析报告
-- `game_iteration_model/SUMMARY.md`: 综合分析总结
+- `output/advanced_analysis/`: 各种可视化图表
 
 ## 开发团队
 

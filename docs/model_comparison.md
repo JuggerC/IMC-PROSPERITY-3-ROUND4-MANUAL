@@ -3,7 +3,7 @@
 ## 模型基本介绍
 
 ### 博弈迭代模型 (Simulator)
-博弈迭代模型基于简单的博弈论和迭代收敛方法，通过考虑玩家类型分布和选择偏好，计算出各宝箱的预期收益，从而推荐最优宝箱选择。模型位于 `game_iteration_model/simulator.py`，采用相对简洁的数学模型。
+博弈迭代模型基于简单的博弈论和迭代收敛方法，通过考虑玩家类型分布和选择偏好，计算出各宝箱的预期收益，从而推荐最优宝箱选择。采用相对简洁的数学模型。
 
 ### 高级策略模型 (Advanced Strategy Analyzer)
 高级策略模型整合了多种复杂的决策理论，包括认知层次分析、行为经济学、社会动态和元策略分析，提供更加全面的宝箱选择推荐。模型位于 `advanced_strategy/treasure_strategy_analyzer.py` 和 `advanced_treasure_analysis.py`，采用模块化的结构实现多种分析方法。
