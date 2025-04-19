@@ -31,7 +31,7 @@
 ### 模型一致性
 - 认知层次模型: 宝箱C3
 - 行为经济学模型: 宝箱C3
-- 社会动态模型: 宝箱B4
+- 社会动态模型: 宝箱A1
 - 元策略模型: 宝箱C3
 
 模型一致性评估: 部分一致 (75%)
@@ -47,26 +47,26 @@
 ## 可视化图表
 
 ### 认知层次模型分布
-![认知层次模型分布](cognitive_distribution.png)
+![Cognitive Hierarchy Model Strategy Distribution](cognitive_distribution.png)
 
 ### 行为经济学模型权重
-![行为经济学模型权重](behavioral_weights.png)
+![Behavioral Economics Model Strategy Weights](behavioral_weights.png)
 
 ### 社会动态模型最终分布
-![社会动态模型最终分布](social_distribution.png)
+![Social Dynamics Model Final Distribution](social_distribution.png)
 
 ### 收益矩阵热图
-![收益矩阵热图](payoff_matrix.png)
+![Payoff Matrix Heatmap](payoff_matrix.png)
 
 ### 社会动态演化过程
-![社会动态演化过程](social_dynamics_evolution.png)
+![Social Dynamics Strategy Evolution](social_dynamics_evolution.png)
 
 ### 各模型最佳策略比较
-![各模型最佳策略比较](model_comparison.png)
+![Best Strategy Comparison Among Models](model_comparison.png)
 
 ### 不同策略预期收益比较
-![不同策略预期收益比较](strategy_profit_comparison.png)
+![Expected Net Profit Comparison Among Different Strategies](strategy_profit_comparison.png)
 
 ### 宝箱预估选择分布
-![宝箱预估选择分布](estimated_selection.png)
+![Treasure Estimated Selection Distribution](estimated_selection.png)
 
