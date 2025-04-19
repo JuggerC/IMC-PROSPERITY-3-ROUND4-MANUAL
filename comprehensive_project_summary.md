@@ -1,5 +1,24 @@
 # 宝箱选择高级策略分析系统：综合项目总结
 
+## 问题陈述
+
+在IMC Prosperity竞赛中，参与者面临一个关键的决策问题：从20个不同特性的宝箱中选择一个、两个或三个，以获取最大的收益。每个宝箱由两个属性决定其价值：
+- **乘数(Multiplier)**: 决定宝箱基础价值的倍数
+- **居民数(Inhabitants)**: 选择该宝箱前已经存在的居民数量
+
+宝箱收益由以下公式计算：
+```
+收益 = 基础宝藏值(10,000) × 乘数 ÷ (居民数 + 选择该宝箱的玩家百分比)
+```
+
+这是一个复杂的策略博弈问题，因为：
+1. 其他玩家的选择直接影响你的收益
+2. 玩家可以选择多个宝箱，但需要支付额外成本
+3. 玩家行为受认知层次、行为偏见和社会影响等因素驱动
+4. 没有单一的"正确"解决方案，最优策略取决于对其他玩家行为的准确预测
+
+本分析系统旨在通过多维度分析，提供科学的宝箱选择建议。
+
 ## 一、项目背景与挑战
 
 ### 问题背景
@@ -139,7 +158,7 @@ def _create_payoff_matrix(self) -> np.ndarray:
 
 收益矩阵的热图可视化如下所示（横轴为对手策略，纵轴为自己策略）：
 
-![Payoff Matrix Heatmap](output/advanced_analysis/payoff_matrix.png)
+![收益矩阵热图](output/advanced_analysis/payoff_matrix.png)
 
 这个热图直观地展示了不同策略组合的收益结构，对角线上的元素（相同选择）收益通常较低，表明当多玩家选择相同宝箱时会分散收益。
 
@@ -176,7 +195,7 @@ def analyze_with_cognitive_hierarchy(self) -> Dict[str, Any]:
 
 通过认知层次分析生成的策略分布如下：
 
-![Cognitive Hierarchy Model Strategy Distribution](output/advanced_analysis/cognitive_distribution.png)
+![认知层次模型分布](output/advanced_analysis/cognitive_distribution.png)
 
 ### 2. 行为经济学分析
 
@@ -200,7 +219,7 @@ def analyze_with_behavioral_economics(self) -> Dict[str, Any]:
 
 行为经济学分析产生的权重分布如下：
 
-![Behavioral Economics Model Strategy Weights](output/advanced_analysis/behavioral_weights.png)
+![行为经济学模型权重](output/advanced_analysis/behavioral_weights.png)
 
 ### 3. 社会动态分析
 
@@ -230,11 +249,11 @@ def analyze_with_social_dynamics(self, num_iterations=30) -> Dict[str, Any]:
 
 社会动态模型的策略分布演化如下：
 
-![Social Dynamics Strategy Evolution](output/advanced_analysis/social_dynamics_evolution.png)
+![社会动态演化过程](output/advanced_analysis/social_dynamics_evolution.png)
 
 最终的社会动态策略分布：
 
-![Social Dynamics Model Final Distribution](output/advanced_analysis/social_distribution.png)
+![社会动态模型最终分布](output/advanced_analysis/social_distribution.png)
 
 ### 4. 元策略分析
 
@@ -260,7 +279,7 @@ def analyze_with_meta_strategy(self) -> Dict[str, Any]:
 
 各模型的最佳策略比较：
 
-![Best Strategy Comparison Among Models](output/advanced_analysis/model_comparison.png)
+![各模型最佳策略比较](output/advanced_analysis/model_comparison.png)
 
 ## 四、结果与建议
 
@@ -274,7 +293,7 @@ def analyze_with_meta_strategy(self) -> Dict[str, Any]:
 
 不同策略类型的预期收益比较：
 
-![Expected Net Profit Comparison Among Different Strategies](output/advanced_analysis/strategy_profit_comparison.png)
+![不同策略预期净收益比较](output/advanced_analysis/strategy_profit_comparison.png)
 
 ## 五、应用与实际价值
 
@@ -285,7 +304,33 @@ def analyze_with_meta_strategy(self) -> Dict[str, Any]:
 3. **人类决策研究**：可用于研究不同理论框架下的人类决策行为
 4. **金融市场建模**：类似方法可应用于金融市场的策略互动建模
 
-## 六、总结与展望
+## 六、最终结果与结论
+
+在对所有模型的分析结果进行综合评估后，本系统得出以下最终建议：
+
+### 最佳策略推荐
+**两宝箱策略**：选择宝箱B4和宝箱D2
+- 宝箱B4：乘数=70，居民=4
+- 宝箱D2：乘数=79，居民=5
+- 预期净收益（扣除额外宝箱成本后）：115,170.01
+
+### 模型一致性分析
+- 认知层次模型推荐：宝箱C3
+- 行为经济学模型推荐：宝箱C3
+- 社会动态模型推荐：宝箱A3（结果随机性较大）
+- 元策略模型推荐：宝箱C3
+
+虽然大多数单模型分析推荐宝箱C3作为单选策略，但综合考虑双宝箱和三宝箱策略后，双宝箱策略(B4+D2)提供最高的预期收益。这表明在当前参数设置下，支付额外成本选择第二个宝箱是值得的，但第三个宝箱的额外成本不足以被增加的收益覆盖。
+
+### 敏感性分析
+我们发现，策略建议对以下因素特别敏感：
+1. 理性玩家比例（当前设置为50%）
+2. 选择第二宝箱的玩家比例（当前设置为15%）
+3. 第二宝箱成本（当前设置为50,000）
+
+如果这些参数发生显著变化，最佳策略建议可能需要相应调整。
+
+## 七、总结与展望
 
 高级策略分析系统通过整合认知层次理论、行为经济学、社会动态分析和元策略分析，为宝箱选择问题提供了全面而深入的决策支持。系统的创新之处在于：
 
