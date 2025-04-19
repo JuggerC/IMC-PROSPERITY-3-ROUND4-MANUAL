@@ -220,7 +220,7 @@ def run_advanced_analysis(output_dir: str,
     cognitive_distribution = cognitive_results["overall_distribution"]
     analyzer.visualizer.plot_strategy_distribution(
         cognitive_distribution, 
-        title="认知层次模型分布", 
+        title="Cognitive Hierarchy Model Strategy Distribution", 
         strategy_names=treasure_names
     ).savefig(os.path.join(output_dir, "cognitive_distribution.png"), dpi=300)
     
@@ -228,7 +228,7 @@ def run_advanced_analysis(output_dir: str,
     behavioral_weights = behavioral_results["final_weights"]
     analyzer.visualizer.plot_strategy_distribution(
         behavioral_weights,
-        title="行为经济学模型权重",
+        title="Behavioral Economics Model Strategy Weights",
         strategy_names=treasure_names
     ).savefig(os.path.join(output_dir, "behavioral_weights.png"), dpi=300)
     
@@ -236,45 +236,44 @@ def run_advanced_analysis(output_dir: str,
     social_distribution = social_results["final_distribution"]
     analyzer.visualizer.plot_strategy_distribution(
         social_distribution,
-        title="社会动态模型最终分布",
+        title="Social Dynamics Model Final Distribution",
         strategy_names=treasure_names
     ).savefig(os.path.join(output_dir, "social_distribution.png"), dpi=300)
     
-    # 4. Create payoff matrix heatmap
-    plt.figure(figsize=(10, 8))
-    ax = sns.heatmap(analyzer.payoff_matrix, 
-                    annot=False,  # 移除数值标注，使图表更清晰
-                    cmap="YlGnBu", 
-                    xticklabels=treasure_names,
-                    yticklabels=treasure_names)
-    plt.title("收益矩阵热图", fontsize=14)
-    plt.xlabel("其他玩家策略", fontsize=12)
-    plt.ylabel("我的策略", fontsize=12)
-    # 减小刻度标签大小，提高可读性
-    plt.xticks(fontsize=8, rotation=45)
-    plt.yticks(fontsize=8, rotation=0)
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, "payoff_matrix.png"), dpi=300)
-    plt.close()
+    # 4. Create social dynamics evolution plot
+    plt.figure(figsize=(14, 7))
+    evolution_data = social_results["evolution_data"]
     
-    # 5. Create social dynamics evolution graph
-    # Prepare social dynamics evolution data
-    evolution_data = np.array(social_results["evolution_data"])
-    plt.figure(figsize=(12, 8))
+    # Transpose for plotting
+    evolution_matrix = np.array([dist for dist in evolution_data]).T
+    
     for i in range(len(treasures)):
-        plt.plot(range(len(evolution_data)), evolution_data[:, i], 
-                 label=f"{treasures[i].id}")  # 移除"Box"前缀
-    plt.xlabel("迭代次数")
-    plt.ylabel("选择概率")
-    plt.title("社会动态演化过程")
-    plt.legend(fontsize=8, ncol=4)  # 使用更紧凑的图例布局
+        plt.plot(range(len(evolution_data)), evolution_matrix[i], label=f"{treasures[i].id}")
+    
+    plt.xlabel("Iteration")
+    plt.ylabel("Strategy Selection Probability")
+    plt.title("Social Dynamics Strategy Evolution")
     plt.grid(True, alpha=0.3)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "social_dynamics_evolution.png"), dpi=300)
     plt.close()
     
+    # 5. Create payoff matrix heatmap
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(analyzer.payoff_matrix, annot=False, fmt=".0f", 
+              xticklabels=[t.id for t in treasures],
+              yticklabels=[t.id for t in treasures], 
+              cmap="YlOrRd")
+    plt.xlabel("Other Players' Strategy")
+    plt.ylabel("My Strategy")
+    plt.title("Payoff Matrix Heatmap")
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, "payoff_matrix.png"), dpi=300)
+    plt.close()
+    
     # 6. Create integrated results visualization - Best strategy comparison among models
-    model_names = ["认知层次", "行为经济学", "社会动态", "元策略"]
+    model_names = ["Cognitive Hierarchy", "Behavioral Economics", "Social Dynamics", "Meta-Strategy"]
     best_strategies = [
         cognitive_results["best_strategy"],
         behavioral_results["best_strategy"],
@@ -288,8 +287,8 @@ def run_advanced_analysis(output_dir: str,
         plt.text(i, 0.2, f"{treasures[strategy].id}", ha='center')
     
     plt.xticks(range(len(model_names)), model_names, rotation=45)
-    plt.ylabel("基础效用")
-    plt.title("各模型最佳策略比较")
+    plt.ylabel("Base Utility")
+    plt.title("Best Strategy Comparison Among Models")
     plt.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "model_comparison.png"), dpi=300)
@@ -297,7 +296,7 @@ def run_advanced_analysis(output_dir: str,
     
     # 7. Create expected profit comparison graph
     plt.figure(figsize=(10, 6))
-    strategies = ["单宝箱策略", "双宝箱策略", "三宝箱策略"]
+    strategies = ["Single-Box Strategy", "Two-Box Strategy", "Three-Box Strategy"]
     profits = [
         integrated_results["best_single_profit"],
         integrated_results["best_pair_profit"],
@@ -306,8 +305,8 @@ def run_advanced_analysis(output_dir: str,
     plt.bar(strategies, profits)
     for i, p in enumerate(profits):
         plt.text(i, p/2, f"{p:.0f}", ha='center', fontsize=12)
-    plt.ylabel("预期净收益")
-    plt.title("不同策略预期净收益比较")
+    plt.ylabel("Expected Net Profit")
+    plt.title("Expected Net Profit Comparison Among Different Strategies")
     plt.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "strategy_profit_comparison.png"), dpi=300)
@@ -319,8 +318,8 @@ def run_advanced_analysis(output_dir: str,
     plt.figure(figsize=(12, 6))
     plt.bar(strategy_names, [estimated_selection.get(name, 0) for name in strategy_names])
     plt.xticks(rotation=45)
-    plt.ylabel("预估选择百分比")
-    plt.title("宝箱预估选择分布")
+    plt.ylabel("Estimated Selection Percentage")
+    plt.title("Treasure Estimated Selection Distribution")
     plt.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "estimated_selection.png"), dpi=300)

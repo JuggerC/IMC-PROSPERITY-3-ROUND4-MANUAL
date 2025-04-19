@@ -139,7 +139,7 @@ def _create_payoff_matrix(self) -> np.ndarray:
 
 收益矩阵的热图可视化如下所示（横轴为对手策略，纵轴为自己策略）：
 
-![收益矩阵热图](output/advanced_analysis/payoff_matrix.png)
+![Payoff Matrix Heatmap](output/advanced_analysis/payoff_matrix.png)
 
 这个热图直观地展示了不同策略组合的收益结构，对角线上的元素（相同选择）收益通常较低，表明当多玩家选择相同宝箱时会分散收益。
 
@@ -176,7 +176,7 @@ def analyze_with_cognitive_hierarchy(self) -> Dict[str, Any]:
 
 通过认知层次分析生成的策略分布如下：
 
-![认知层次模型分布](output/advanced_analysis/cognitive_distribution.png)
+![Cognitive Hierarchy Model Strategy Distribution](output/advanced_analysis/cognitive_distribution.png)
 
 ### 2. 行为经济学分析
 
@@ -200,7 +200,7 @@ def analyze_with_behavioral_economics(self) -> Dict[str, Any]:
 
 行为经济学分析产生的权重分布如下：
 
-![行为经济学模型权重](output/advanced_analysis/behavioral_weights.png)
+![Behavioral Economics Model Strategy Weights](output/advanced_analysis/behavioral_weights.png)
 
 ### 3. 社会动态分析
 
@@ -230,11 +230,11 @@ def analyze_with_social_dynamics(self, num_iterations=30) -> Dict[str, Any]:
 
 社会动态模型的策略分布演化如下：
 
-![社会动态演化过程](output/advanced_analysis/social_dynamics_evolution.png)
+![Social Dynamics Strategy Evolution](output/advanced_analysis/social_dynamics_evolution.png)
 
 最终的社会动态策略分布：
 
-![社会动态模型最终分布](output/advanced_analysis/social_distribution.png)
+![Social Dynamics Model Final Distribution](output/advanced_analysis/social_distribution.png)
 
 ### 4. 元策略分析
 
@@ -260,7 +260,7 @@ def analyze_with_meta_strategy(self) -> Dict[str, Any]:
 
 各模型的最佳策略比较：
 
-![各模型最佳策略比较](output/advanced_analysis/model_comparison.png)
+![Best Strategy Comparison Among Models](output/advanced_analysis/model_comparison.png)
 
 ## 四、结果与建议
 
@@ -274,7 +274,7 @@ def analyze_with_meta_strategy(self) -> Dict[str, Any]:
 
 不同策略类型的预期收益比较：
 
-![不同策略预期净收益比较](output/advanced_analysis/strategy_profit_comparison.png)
+![Expected Net Profit Comparison Among Different Strategies](output/advanced_analysis/strategy_profit_comparison.png)
 
 ## 五、应用与实际价值
 
