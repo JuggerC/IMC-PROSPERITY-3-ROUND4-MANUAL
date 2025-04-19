@@ -264,7 +264,7 @@ def run_advanced_analysis(output_dir: str,
     sns.heatmap(analyzer.payoff_matrix, annot=False, fmt=".0f", 
               xticklabels=[t.id for t in treasures],
               yticklabels=[t.id for t in treasures], 
-              cmap="YlOrRd")
+              cmap="YlGnBu")
     plt.xlabel("Other Players' Strategy")
     plt.ylabel("My Strategy")
     plt.title("Payoff Matrix Heatmap")
