@@ -19,8 +19,11 @@ import json
 import random
 import time
 import matplotlib
-# Use standard fonts instead of Chinese fonts
-matplotlib.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'sans-serif']
+# 使用支持中文显示的字体，针对MacOS系统
+if sys.platform == 'darwin':  # macOS
+    matplotlib.rcParams['font.sans-serif'] = ['Heiti TC', 'Arial', 'Helvetica', 'sans-serif']
+else:  # Windows和Linux
+    matplotlib.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'Arial', 'sans-serif']
 matplotlib.rcParams['axes.unicode_minus'] = True
 
 # Add current directory to module search path
@@ -211,13 +214,13 @@ def run_advanced_analysis(output_dir: str,
     print("\nGenerating visualizations...")
     
     # Create treasure name list for visualization
-    treasure_names = [f"Box {t.id}" for t in treasures]
+    treasure_names = [f"{t.id}" for t in treasures]
     
     # 1. Create cognitive hierarchy model strategy distribution visualization
     cognitive_distribution = cognitive_results["overall_distribution"]
     analyzer.visualizer.plot_strategy_distribution(
         cognitive_distribution, 
-        title="Cognitive Hierarchy Model Distribution", 
+        title="认知层次模型分布", 
         strategy_names=treasure_names
     ).savefig(os.path.join(output_dir, "cognitive_distribution.png"), dpi=300)
     
@@ -225,7 +228,7 @@ def run_advanced_analysis(output_dir: str,
     behavioral_weights = behavioral_results["final_weights"]
     analyzer.visualizer.plot_strategy_distribution(
         behavioral_weights,
-        title="Behavioral Economics Model Weights",
+        title="行为经济学模型权重",
         strategy_names=treasure_names
     ).savefig(os.path.join(output_dir, "behavioral_weights.png"), dpi=300)
     
@@ -233,15 +236,26 @@ def run_advanced_analysis(output_dir: str,
     social_distribution = social_results["final_distribution"]
     analyzer.visualizer.plot_strategy_distribution(
         social_distribution,
-        title="Social Dynamics Model Final Distribution",
+        title="社会动态模型最终分布",
         strategy_names=treasure_names
     ).savefig(os.path.join(output_dir, "social_distribution.png"), dpi=300)
     
     # 4. Create payoff matrix heatmap
-    analyzer.visualizer.plot_payoff_matrix(
-        analyzer.payoff_matrix,
-        strategy_names=treasure_names
-    ).savefig(os.path.join(output_dir, "payoff_matrix.png"), dpi=300)
+    plt.figure(figsize=(10, 8))
+    ax = sns.heatmap(analyzer.payoff_matrix, 
+                    annot=False,  # 移除数值标注，使图表更清晰
+                    cmap="YlGnBu", 
+                    xticklabels=treasure_names,
+                    yticklabels=treasure_names)
+    plt.title("收益矩阵热图", fontsize=14)
+    plt.xlabel("其他玩家策略", fontsize=12)
+    plt.ylabel("我的策略", fontsize=12)
+    # 减小刻度标签大小，提高可读性
+    plt.xticks(fontsize=8, rotation=45)
+    plt.yticks(fontsize=8, rotation=0)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, "payoff_matrix.png"), dpi=300)
+    plt.close()
     
     # 5. Create social dynamics evolution graph
     # Prepare social dynamics evolution data
@@ -249,18 +263,18 @@ def run_advanced_analysis(output_dir: str,
     plt.figure(figsize=(12, 8))
     for i in range(len(treasures)):
         plt.plot(range(len(evolution_data)), evolution_data[:, i], 
-                 label=f"Box {treasures[i].id}")
-    plt.xlabel("Iteration")
-    plt.ylabel("Selection Probability")
-    plt.title("Social Dynamics Evolution Process")
-    plt.legend()
+                 label=f"{treasures[i].id}")  # 移除"Box"前缀
+    plt.xlabel("迭代次数")
+    plt.ylabel("选择概率")
+    plt.title("社会动态演化过程")
+    plt.legend(fontsize=8, ncol=4)  # 使用更紧凑的图例布局
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "social_dynamics_evolution.png"), dpi=300)
     plt.close()
     
     # 6. Create integrated results visualization - Best strategy comparison among models
-    model_names = ["Cognitive Hierarchy", "Behavioral Economics", "Social Dynamics", "Meta-Strategy"]
+    model_names = ["认知层次", "行为经济学", "社会动态", "元策略"]
     best_strategies = [
         cognitive_results["best_strategy"],
         behavioral_results["best_strategy"],
@@ -270,12 +284,12 @@ def run_advanced_analysis(output_dir: str,
     
     plt.figure(figsize=(10, 6))
     for i, (model, strategy) in enumerate(zip(model_names, best_strategies)):
-        plt.bar(i, treasures[strategy].base_utility, label=f"Box {treasures[strategy].id}")
-        plt.text(i, 0.2, f"Box {treasures[strategy].id}", ha='center')
+        plt.bar(i, treasures[strategy].base_utility, label=f"{treasures[strategy].id}")
+        plt.text(i, 0.2, f"{treasures[strategy].id}", ha='center')
     
     plt.xticks(range(len(model_names)), model_names, rotation=45)
-    plt.ylabel("Base Utility")
-    plt.title("Best Strategy Comparison Among Models")
+    plt.ylabel("基础效用")
+    plt.title("各模型最佳策略比较")
     plt.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "model_comparison.png"), dpi=300)
@@ -283,7 +297,7 @@ def run_advanced_analysis(output_dir: str,
     
     # 7. Create expected profit comparison graph
     plt.figure(figsize=(10, 6))
-    strategies = ["Single-Box Strategy", "Two-Box Strategy", "Three-Box Strategy"]
+    strategies = ["单宝箱策略", "双宝箱策略", "三宝箱策略"]
     profits = [
         integrated_results["best_single_profit"],
         integrated_results["best_pair_profit"],
@@ -292,8 +306,8 @@ def run_advanced_analysis(output_dir: str,
     plt.bar(strategies, profits)
     for i, p in enumerate(profits):
         plt.text(i, p/2, f"{p:.0f}", ha='center', fontsize=12)
-    plt.ylabel("Expected Net Profit")
-    plt.title("Expected Net Profit Comparison Among Different Strategies")
+    plt.ylabel("预期净收益")
+    plt.title("不同策略预期净收益比较")
     plt.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "strategy_profit_comparison.png"), dpi=300)
@@ -305,8 +319,8 @@ def run_advanced_analysis(output_dir: str,
     plt.figure(figsize=(12, 6))
     plt.bar(strategy_names, [estimated_selection.get(name, 0) for name in strategy_names])
     plt.xticks(rotation=45)
-    plt.ylabel("Estimated Selection Percentage")
-    plt.title("Treasure Estimated Selection Distribution")
+    plt.ylabel("预估选择百分比")
+    plt.title("宝箱预估选择分布")
     plt.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "estimated_selection.png"), dpi=300)
