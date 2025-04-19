@@ -314,28 +314,131 @@ def run_advanced_analysis(output_dir: str,
     
     # Generate and save report
     print("\nGenerating analysis report...")
-    report = analyzer.generate_report(output_dir)
+    report = ["# 宝箱选择高级策略分析报告\n"]
+    
+    # Analysis summary
+    report.append("## 分析概要\n")
+    report.append(f"- 分析的宝箱数量: {len(treasures)}\n")
+    report.append(f"- 玩家数量: {analyzer.num_players}\n")
+    report.append(f"- 理性玩家比例: {analyzer.rational_pct:.2f}\n")
+    report.append(f"- 启发式玩家比例: {analyzer.heuristic_pct:.2f}\n")
+    report.append(f"- 随机玩家比例: {analyzer.random_pct:.2f}\n")
+    report.append(f"- 选择第二宝箱比例: {analyzer.second_box_pct:.2f}\n")
+    report.append(f"- 第二宝箱成本: {analyzer.second_box_cost}\n")
+    report.append(f"- 选择第三宝箱比例: {analyzer.third_box_pct:.2f}\n")
+    report.append(f"- 第三宝箱成本: {analyzer.third_box_cost}\n")
+    
+    # Integrated analysis results
+    report.append("\n## 综合分析结果\n")
+    
+    # Single-box strategy
+    report.append("\n### 最佳单选策略\n")
+    best_treasure = integrated_results.get("best_treasure")
+    if best_treasure:
+        report.append(f"综合所有模型的最优单选: 宝箱{best_treasure.id}\n")
+        report.append(f"- 乘数: {best_treasure.multiplier}\n")
+        report.append(f"- 居民: {best_treasure.inhabitants}\n")
+        report.append(f"预期收益: {integrated_results['best_single_profit']:.2f}\n")
+    else:
+        report.append("无法确定最优单选策略。所有模型的分析结果不一致或无法产生有效的单选策略推荐。\n")
+    
+    # Two-box strategy
+    report.append("\n### 最佳双选策略\n")
+    best_pair = integrated_results.get("best_pair_treasures")
+    if best_pair:
+        report.append(f"综合所有模型的最优双选: 宝箱{best_pair[0].id}和宝箱{best_pair[1].id}\n")
+        report.append(f"- 宝箱{best_pair[0].id}: 乘数={best_pair[0].multiplier}, 居民={best_pair[0].inhabitants}\n")
+        report.append(f"- 宝箱{best_pair[1].id}: 乘数={best_pair[1].multiplier}, 居民={best_pair[1].inhabitants}\n")
+        report.append(f"预期净收益: {integrated_results['best_pair_profit']:.2f}\n")
+    else:
+        report.append("无法确定最优双选策略。\n")
+    
+    # Three-box strategy
+    report.append("\n### 最佳三选策略\n")
+    best_triple = integrated_results.get("best_triple_treasures")
+    if best_triple:
+        report.append(f"综合所有模型的最优三选: 宝箱{best_triple[0].id}、宝箱{best_triple[1].id}和宝箱{best_triple[2].id}\n")
+        report.append(f"- 宝箱{best_triple[0].id}: 乘数={best_triple[0].multiplier}, 居民={best_triple[0].inhabitants}\n")
+        report.append(f"- 宝箱{best_triple[1].id}: 乘数={best_triple[1].multiplier}, 居民={best_triple[1].inhabitants}\n")
+        report.append(f"- 宝箱{best_triple[2].id}: 乘数={best_triple[2].multiplier}, 居民={best_triple[2].inhabitants}\n")
+        report.append(f"预期净收益: {integrated_results['best_triple_profit']:.2f}\n")
+    else:
+        report.append("无法确定最优三选策略。\n")
+    
+    # Model consistency
+    report.append("\n### 模型一致性\n")
+    model_recommendations = {
+        "认知层次模型": cognitive_results["best_treasure"].id if "best_treasure" in cognitive_results else "无推荐",
+        "行为经济学模型": behavioral_results["best_treasure"].id if "best_treasure" in behavioral_results else "无推荐",
+        "社会动态模型": social_results["best_treasure"].id if "best_treasure" in social_results else "无推荐",
+        "元策略模型": meta_results["best_treasure"].id if "best_treasure" in meta_results else "无推荐"
+    }
+    
+    for model, rec in model_recommendations.items():
+        report.append(f"- {model}: 宝箱{rec}\n")
+    
+    # Calculate consistency
+    recommendations = list(model_recommendations.values())
+    if "无推荐" in recommendations:
+        consistency = "部分模型无法提供推荐"
+    elif len(set(recommendations)) == 1:
+        consistency = "完全一致 (100%)"
+    else:
+        most_common = max(set(recommendations), key=recommendations.count)
+        consistency_pct = recommendations.count(most_common) / len(recommendations) * 100
+        consistency = f"部分一致 ({consistency_pct:.0f}%)"
+    
+    report.append(f"\n模型一致性评估: {consistency}\n")
+    
+    # Final recommendation
+    report.append("\n## 总结建议\n")
+    
+    strategy_profits = {
+        "single": integrated_results.get("best_single_profit", float("-inf")),
+        "pair": integrated_results.get("best_pair_profit", float("-inf")),
+        "triple": integrated_results.get("best_triple_profit", float("-inf"))
+    }
+    
+    best_strategy_type = max(strategy_profits.items(), key=lambda x: x[1])[0]
+    
+    if best_strategy_type == "single" and best_treasure:
+        report.append(f"建议选择单宝箱策略: 宝箱{best_treasure.id}\n\n")
+        report.append(f"预期收益: {integrated_results['best_single_profit']:.2f}\n\n")
+    elif best_strategy_type == "pair" and best_pair:
+        report.append(f"建议选择双宝箱策略: 宝箱{best_pair[0].id}和宝箱{best_pair[1].id}\n\n")
+        report.append(f"预期净收益: {integrated_results['best_pair_profit']:.2f}\n\n")
+    elif best_strategy_type == "triple" and best_triple:
+        report.append(f"建议选择三宝箱策略: 宝箱{best_triple[0].id}、宝箱{best_triple[1].id}和宝箱{best_triple[2].id}\n\n")
+        report.append(f"预期净收益: {integrated_results['best_triple_profit']:.2f}\n\n")
+    else:
+        report.append("无法提供明确的策略建议，请参考各模型分析结果进行决策。\n\n")
+    
+    report.append("理由: 综合考虑了各宝箱的基础属性、玩家行为模式和预期收益后，上述策略在当前条件下提供最高的预期收益。\n")
+    
+    # Save report
+    with open(os.path.join(output_dir, "advanced_strategy_report.md"), "w") as f:
+        f.write("".join(report))
     
     # Update report, add chart references
     report_path = os.path.join(output_dir, "advanced_strategy_report.md")
     with open(report_path, 'a') as f:
-        f.write("\n\n## Visualization Charts\n\n")
-        f.write("### Cognitive Hierarchy Model Distribution\n")
-        f.write("![Cognitive Hierarchy Model Distribution](cognitive_distribution.png)\n\n")
-        f.write("### Behavioral Economics Model Weights\n")
-        f.write("![Behavioral Economics Model Weights](behavioral_weights.png)\n\n")
-        f.write("### Social Dynamics Model Final Distribution\n")
-        f.write("![Social Dynamics Model Final Distribution](social_distribution.png)\n\n")
-        f.write("### Payoff Matrix Heatmap\n")
-        f.write("![Payoff Matrix Heatmap](payoff_matrix.png)\n\n")
-        f.write("### Social Dynamics Evolution Process\n")
-        f.write("![Social Dynamics Evolution Process](social_dynamics_evolution.png)\n\n")
-        f.write("### Best Strategy Comparison Among Models\n")
-        f.write("![Best Strategy Comparison Among Models](model_comparison.png)\n\n")
-        f.write("### Expected Net Profit Comparison Among Different Strategies\n")
-        f.write("![Expected Net Profit Comparison Among Different Strategies](strategy_profit_comparison.png)\n\n")
-        f.write("### Treasure Estimated Selection Distribution\n")
-        f.write("![Treasure Estimated Selection Distribution](estimated_selection.png)\n\n")
+        f.write("\n\n## 可视化图表\n\n")
+        f.write("### 认知层次模型分布\n")
+        f.write("![认知层次模型分布](cognitive_distribution.png)\n\n")
+        f.write("### 行为经济学模型权重\n")
+        f.write("![行为经济学模型权重](behavioral_weights.png)\n\n")
+        f.write("### 社会动态模型最终分布\n")
+        f.write("![社会动态模型最终分布](social_distribution.png)\n\n")
+        f.write("### 收益矩阵热图\n")
+        f.write("![收益矩阵热图](payoff_matrix.png)\n\n")
+        f.write("### 社会动态演化过程\n")
+        f.write("![社会动态演化过程](social_dynamics_evolution.png)\n\n")
+        f.write("### 各模型最佳策略比较\n")
+        f.write("![各模型最佳策略比较](model_comparison.png)\n\n")
+        f.write("### 不同策略预期收益比较\n")
+        f.write("![不同策略预期收益比较](strategy_profit_comparison.png)\n\n")
+        f.write("### 宝箱预估选择分布\n")
+        f.write("![宝箱预估选择分布](estimated_selection.png)\n\n")
     
     print(f"\nAnalysis completed! Report and visualization charts have been saved to {output_dir}")
     
