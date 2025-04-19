@@ -110,6 +110,17 @@ python advanced_treasure_analysis.py --rational 0.5 --heuristic 0.3 --second-box
    - 策略收益比较图 (`strategy_profit_comparison.png`)
    - 选择分布估计图 (`estimated_selection.png`)
 
+### 示例可视化图表
+
+#### 策略收益比较图
+![策略收益比较图](https://raw.githubusercontent.com/JuggerC/IMC-PROSPERITY-3-ROUND4-MANUAL/main/output/advanced_analysis/strategy_profit_comparison.png)
+
+#### 认知层次分布图
+![认知层次分布图](https://raw.githubusercontent.com/JuggerC/IMC-PROSPERITY-3-ROUND4-MANUAL/main/output/advanced_analysis/cognitive_distribution.png)
+
+#### 社会动态演化图
+![社会动态演化图](https://raw.githubusercontent.com/JuggerC/IMC-PROSPERITY-3-ROUND4-MANUAL/main/output/advanced_analysis/social_dynamics_evolution.png)
+
 ## 决策建议
 
 系统根据多模型分析提供三类策略建议：
